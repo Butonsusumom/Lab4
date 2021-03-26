@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     View mainLayout;
     TextView textColor;
     Button buttonBlue, buttonViolet, buttonPink;
-    int currBackground;
+    int currBackground = R.drawable.gradient_background_pink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
