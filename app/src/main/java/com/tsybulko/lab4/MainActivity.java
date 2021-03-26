@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
@@ -15,10 +16,11 @@ public class MainActivity extends AppCompatActivity {
     public final static String TEXT_KEY = "TEXT";
     public final static String BGD_KEY = "BGD";
 
-    View mainLayout;
-    TextView textColor;
-    Button buttonBlue, buttonViolet, buttonPink;
-    int currBackground = R.drawable.gradient_background_pink;
+    private View mainLayout;
+    private TextView textColor;
+    private Button buttonBlue, buttonViolet, buttonPink;
+
+    private String strBlue,strViolet,strPink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,16 +33,15 @@ public class MainActivity extends AppCompatActivity {
         buttonViolet = (Button) findViewById(R.id.buttonViolet);
         buttonPink = (Button) findViewById(R.id.buttonPink);
 
-        String strBlue = getResources().getString(R.string.blue);
-        String strViolet = getResources().getString(R.string.violet);
-        String strPink = getResources().getString(R.string.pink);
+        strBlue = getResources().getString(R.string.blue);
+        strViolet = getResources().getString(R.string.violet);
+        strPink = getResources().getString(R.string.pink);
 
         buttonBlue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 textColor.setText(strBlue);
-                currBackground = R.drawable.gradient_background_blue;
-                mainLayout.setBackgroundResource(currBackground);
+                mainLayout.setBackgroundResource(R.drawable.gradient_background_blue);
             }
         });
 
@@ -48,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 textColor.setText(strViolet);
-                currBackground = R.drawable.gradient_background_violet;
-                mainLayout.setBackgroundResource(currBackground);
+                mainLayout.setBackgroundResource(R.drawable.gradient_background_violet);
             }
         });
 
@@ -57,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 textColor.setText(strPink);
-                currBackground = R.drawable.gradient_background_pink;
-                mainLayout.setBackgroundResource(currBackground);
+                mainLayout.setBackgroundResource(R.drawable.gradient_background_pink);
             }
         });
     }
@@ -66,8 +65,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        Drawable bgd = mainLayout.getBackground();
         outState.putString(TEXT_KEY,textColor.getText().toString());
-        outState.putInt(BGD_KEY, currBackground);
+        outState.putInt(BGD_KEY, getCurrBackground());
     }
 
     @Override
@@ -75,5 +75,15 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedState);
         textColor.setText(savedState.getString(TEXT_KEY));
         mainLayout.setBackgroundResource(savedState.getInt(BGD_KEY));
+    }
+
+    private int getCurrBackground(){
+        switch (textColor.getText().toString()){
+            case "Blue" : return  R.drawable.gradient_background_blue;
+            case "Violet" : return  R.drawable.gradient_background_violet;
+            case "Pink" : return  R.drawable.gradient_background_pink;
+            default:
+                return 0;
+        }
     }
 }
