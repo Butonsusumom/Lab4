@@ -3,16 +3,22 @@ package com.tsybulko.lab4;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    public final static String TEXT_KEY = "TEXT";
+    public final static String BGD_KEY = "BGD";
+
     View mainLayout;
     TextView textColor;
     Button buttonBlue, buttonViolet, buttonPink;
+    int currBackground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 textColor.setText(strBlue);
-                mainLayout.setBackgroundResource(R.drawable.gradient_background_blue);
+                currBackground = R.drawable.gradient_background_blue;
+                mainLayout.setBackgroundResource(currBackground);
             }
         });
 
@@ -41,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 textColor.setText(strViolet);
-                mainLayout.setBackgroundResource(R.drawable.gradient_background_violet);
+                currBackground = R.drawable.gradient_background_violet;
+                mainLayout.setBackgroundResource(currBackground);
             }
         });
 
@@ -49,9 +57,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 textColor.setText(strPink);
-                mainLayout.setBackgroundResource(R.drawable.gradient_background_pink);
+                currBackground = R.drawable.gradient_background_pink;
+                mainLayout.setBackgroundResource(currBackground);
             }
         });
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(TEXT_KEY,textColor.getText().toString());
+        outState.putInt(BGD_KEY, currBackground);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedState) {
+        super.onRestoreInstanceState(savedState);
+        textColor.setText(savedState.getString(TEXT_KEY));
+        mainLayout.setBackgroundResource(savedState.getInt(BGD_KEY));
+    }
 }
